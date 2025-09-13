@@ -10,6 +10,9 @@ namespace GestorDeDrones.ViewModels
 {
     public class AddDroneViewModel : INotifyPropertyChanged
     {
+        // Evento para notificar a otras partes de la aplicación (como MainWindowViewModel)
+        public event Action<Drone> DroneAdded;
+
         private Drone _newDrone;
         public Drone NewDrone
         {
@@ -37,13 +40,15 @@ namespace GestorDeDrones.ViewModels
                 {
                     db.Drones.Add(NewDrone);
                     db.SaveChanges();
+                    
+                    // Llama al evento después de guardar para notificar a la ventana principal
+                    DroneAdded?.Invoke(NewDrone);
                 }
-                // Opcional: Notificar al usuario o cerrar la ventana
+                
                 Console.WriteLine("Dron guardado con éxito.");
             }
             catch (Exception ex)
             {
-                // Manejo de errores
                 Console.WriteLine($"Error al guardar el dron: {ex.Message}");
             }
         }

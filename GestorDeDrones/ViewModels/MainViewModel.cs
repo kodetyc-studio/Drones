@@ -1,7 +1,12 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using GestorDeDrones.Data;
 using GestorDeDrones.Models;
-using GestorDeDrones.Views; // Asegúrate de añadir esta referencia
+using GestorDeDrones.Views;
+using GestorDeDrones.ViewModels; // Se añade para poder referenciar a AddDroneViewModel
 
 namespace GestorDeDrones.ViewModels
 {
@@ -13,38 +18,46 @@ namespace GestorDeDrones.ViewModels
         public MainViewModel()
         {
             Drones = new ObservableCollection<Drone>();
-            LoadSampleData();
+            LoadDronesFromDatabase();
             AddDroneCommand = new RelayCommand(OpenAddDroneWindow);
+        }
+
+        private void LoadDronesFromDatabase()
+        {
+            using (var db = new DronesDbContext())
+            {
+                var dronesList = db.Drones.ToList();
+                // Limpiamos y añadimos los drones de la base de datos a la colección
+                Drones.Clear();
+                foreach (var drone in dronesList)
+                {
+                    Drones.Add(drone);
+                }
+            }
         }
 
         private void OpenAddDroneWindow(object parameter)
         {
-            AddDroneWindow addWindow = new AddDroneWindow();
+            var addWindowViewModel = new AddDroneViewModel();
+            var addWindow = new AddDroneWindow
+            {
+                DataContext = addWindowViewModel
+            };
+
+            // Suscribimos al evento DroneAdded del AddDroneViewModel
+            addWindowViewModel.DroneAdded += OnDroneAdded;
+
+            // Mostramos la ventana como un diálogo para bloquear la principal
             addWindow.ShowDialog();
+
+            // Desuscribimos el evento para evitar fugas de memoria
+            addWindowViewModel.DroneAdded -= OnDroneAdded;
         }
 
-        private void LoadSampleData()
+        private void OnDroneAdded(Drone newDrone)
         {
-            // Datos de ejemplo para probar la interfaz
-            Drones.Add(new Drone 
-            { 
-                Marca = "DJI", 
-                Modelo = "Mavic Air 2", 
-                NumeroSerie = "1A2B3C4D", 
-                Peso = 570, 
-                Clase = "C1", 
-                Anio = 2020 
-            });
-
-            Drones.Add(new Drone
-            {
-                Marca = "Autel Robotics",
-                Modelo = "EVO Nano+",
-                NumeroSerie = "9X8Y7Z6W",
-                Peso = 249,
-                Clase = "C0",
-                Anio = 2021
-            });
+            // Este método se ejecuta cuando un dron se guarda con éxito
+            Drones.Add(newDrone);
         }
     }
 }
