@@ -149,3 +149,4 @@ C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debu
 C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net8.0-windows\Views\AddDroneWindow.g.cs
 C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net8.0-windows\Views\AddDroneWindow.baml
 C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net8.0-windows\GestorDeDrones.sourcelink.json
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net8.0-windows\Views\DroneDetailsWindow.g.cs

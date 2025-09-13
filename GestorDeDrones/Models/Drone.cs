@@ -24,7 +24,6 @@ namespace GestorDeDrones.Models
             Accesorios = new ObservableCollection<Accesorio>();
         }
 
-        // Implementación de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

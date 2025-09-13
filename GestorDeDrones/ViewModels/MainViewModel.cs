@@ -1,12 +1,14 @@
+#nullable enable
+
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using GestorDeDrones.Data;
 using GestorDeDrones.Models;
+using GestorDeDrones.Utilities;
 using GestorDeDrones.Views;
-using GestorDeDrones.ViewModels; // Se añade para poder referenciar a AddDroneViewModel
+using Microsoft.EntityFrameworkCore;
 
 namespace GestorDeDrones.ViewModels
 {
@@ -14,20 +16,32 @@ namespace GestorDeDrones.ViewModels
     {
         public ObservableCollection<Drone> Drones { get; set; }
         public ICommand AddDroneCommand { get; }
+        public ICommand OpenDetailsCommand { get; }
+
+        private Drone? _selectedDrone;
+        public Drone? SelectedDrone
+        {
+            get => _selectedDrone;
+            set => _selectedDrone = value;
+        }
 
         public MainViewModel()
         {
             Drones = new ObservableCollection<Drone>();
             LoadDronesFromDatabase();
             AddDroneCommand = new RelayCommand(OpenAddDroneWindow);
+            OpenDetailsCommand = new RelayCommand(OpenDetailsWindow);
         }
 
         private void LoadDronesFromDatabase()
         {
             using (var db = new DronesDbContext())
             {
-                var dronesList = db.Drones.ToList();
-                // Limpiamos y añadimos los drones de la base de datos a la colección
+                var dronesList = db.Drones
+                                   .Include(d => d.Baterias)
+                                   .Include(d => d.Mandos)
+                                   .Include(d => d.Accesorios)
+                                   .ToList();
                 Drones.Clear();
                 foreach (var drone in dronesList)
                 {
@@ -36,7 +50,7 @@ namespace GestorDeDrones.ViewModels
             }
         }
 
-        private void OpenAddDroneWindow(object parameter)
+        private void OpenAddDroneWindow(object? parameter)
         {
             var addWindowViewModel = new AddDroneViewModel();
             var addWindow = new AddDroneWindow
@@ -44,20 +58,25 @@ namespace GestorDeDrones.ViewModels
                 DataContext = addWindowViewModel
             };
 
-            // Suscribimos al evento DroneAdded del AddDroneViewModel
             addWindowViewModel.DroneAdded += OnDroneAdded;
-
-            // Mostramos la ventana como un diálogo para bloquear la principal
             addWindow.ShowDialog();
-
-            // Desuscribimos el evento para evitar fugas de memoria
             addWindowViewModel.DroneAdded -= OnDroneAdded;
         }
 
         private void OnDroneAdded(Drone newDrone)
         {
-            // Este método se ejecuta cuando un dron se guarda con éxito
             Drones.Add(newDrone);
+        }
+
+        private void OpenDetailsWindow(object? parameter)
+        {
+            if (parameter is Drone selectedDrone)
+            {
+                var viewModel = new DroneDetailsViewModel(selectedDrone);
+                var detailsWindow = new DroneDetailsWindow(viewModel);
+                detailsWindow.ShowDialog();
+                LoadDronesFromDatabase();
+            }
         }
     }
 }

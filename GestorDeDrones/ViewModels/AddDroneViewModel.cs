@@ -2,7 +2,7 @@ using System;
 using System.Windows.Input;
 using GestorDeDrones.Data;
 using GestorDeDrones.Models;
-using Microsoft.EntityFrameworkCore;
+using GestorDeDrones.Utilities; // Importamos el nuevo namespace
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -10,7 +10,6 @@ namespace GestorDeDrones.ViewModels
 {
     public class AddDroneViewModel : INotifyPropertyChanged
     {
-        // Evento para notificar a otras partes de la aplicación (como MainWindowViewModel)
         public event Action<Drone> DroneAdded;
 
         private Drone _newDrone;
@@ -40,11 +39,8 @@ namespace GestorDeDrones.ViewModels
                 {
                     db.Drones.Add(NewDrone);
                     db.SaveChanges();
-                    
-                    // Llama al evento después de guardar para notificar a la ventana principal
                     DroneAdded?.Invoke(NewDrone);
                 }
-                
                 Console.WriteLine("Dron guardado con éxito.");
             }
             catch (Exception ex)
@@ -53,33 +49,10 @@ namespace GestorDeDrones.ViewModels
             }
         }
 
-        // Implementación de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    // Una implementación simple de ICommand para el ejemplo
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool> _canExecute;
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-        public void Execute(object parameter) => _execute(parameter);
     }
 }

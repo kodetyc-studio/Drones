@@ -13,7 +13,18 @@
     </Window.DataContext>
 
     <Grid Margin="10">
-        <DataGrid ItemsSource="{Binding Drones}" AutoGenerateColumns="True" IsReadOnly="True" Margin="0,40,0,0">
+        <DataGrid ItemsSource="{Binding Drones}"
+                  AutoGenerateColumns="True"
+                  IsReadOnly="True"
+                  Margin="0,40,0,0"
+                  SelectedItem="{Binding SelectedDrone}">
+
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick"
+                              Command="{Binding OpenDetailsCommand}"
+                              CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}" />
+            </DataGrid.InputBindings>
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="*" />
                 <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo}" Width="*" />
@@ -23,7 +34,7 @@
                 <DataGridTextColumn Header="Año" Binding="{Binding Anio}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Button Content="Añadir Nuevo Dron" Margin="0,0,10,0" Command="{Binding AddDroneCommand}"/>
         </StackPanel>

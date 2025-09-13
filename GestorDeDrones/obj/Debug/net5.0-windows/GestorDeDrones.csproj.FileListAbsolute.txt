@@ -1,0 +1,8 @@
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\GestorDeDrones.csproj.AssemblyReference.cache
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\MainWindow.g.cs
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\Views\AddDroneWindow.g.cs
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\Views\DroneDetailsWindow.g.cs
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\App.g.cs
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\GestorDeDrones_MarkupCompile.cache
+C:\Users\carlo\OneDrive\Documentos\Github Kodetyc\Drones\GestorDeDrones\obj\Debug\net5.0-windows\GestorDeDrones_MarkupCompile.lref
